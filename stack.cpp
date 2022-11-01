@@ -5,7 +5,7 @@
 
 void stack_init(struct stack* stack)
 {
-    stack -> data = (stack_type*)calloc(SIZE, sizeof(stack_type));
+    stack -> data = (element_t*)calloc(SIZE, sizeof(element_t));
     for(int i = 0; i < SIZE; i++)
         stack -> data[i] = 0;
     stack -> depth = 0;
@@ -26,7 +26,7 @@ void input_commands()
     scanf("%s", command); // строки нельзя просто так сравнивать
 }
 
-void stack_push(struct stack* stack, stack_type i)
+void stack_push(struct stack* stack, element_t i)
 {
     stack_check(stack);
     stack -> data[stack -> depth] = i;
@@ -34,10 +34,10 @@ void stack_push(struct stack* stack, stack_type i)
     stack_check(stack);
 }
 
-stack_type stack_pop(struct stack* stack)
+element_t stack_pop(struct stack* stack)
 {
     stack_check(stack);
-    stack_type last_element = stack -> data[stack -> depth - 1];
+    element_t last_element = stack -> data[stack -> depth - 1];
     stack -> depth--;
     stack_check(stack);
     return last_element;
@@ -47,6 +47,22 @@ void stack_add(struct stack* stack)
 {
     stack_check(stack);
     stack -> data[stack -> depth - 2] += stack -> data[stack -> depth - 1];
+    stack -> depth--;
+    stack_check(stack);
+}
+
+void stack_mul(struct stack* stack)
+{
+    stack_check(stack);
+    stack -> data[stack -> depth - 2] *= stack -> data[stack -> depth - 1];
+    stack -> depth--;
+    stack_check(stack);
+}
+
+void stack_div(struct stack* stack)
+{
+    stack_check(stack);
+    stack -> data[stack -> depth - 2] /= stack -> data[stack -> depth - 1];
     stack -> depth--;
     stack_check(stack);
 }
