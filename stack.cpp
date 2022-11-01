@@ -10,7 +10,13 @@ void stack_init(struct stack* stack)
         stack -> data[i] = 0;
     stack -> depth = 0;
 
-    steck_check(&stack);
+    stack_check(stack);
+}
+
+void stack_delete(struct stack* stack)
+{
+    stack -> depth = -1;
+    free(stack -> data);
 }
 
 void input_commands()
@@ -22,18 +28,18 @@ void input_commands()
 
 void stack_push(struct stack* stack, stack_type i)
 {
-    stack_check(&stack);
+    stack_check(stack);
     stack -> data[stack -> depth] = i;
     stack -> depth++;
-    stack_check(&stack);
+    stack_check(stack);
 }
 
 void stack_add(struct stack* stack)
 {
-    stack_check(&stack);
+    stack_check(stack);
     stack -> data[stack -> depth - 2] += stack -> data[stack -> depth - 1];
     stack -> depth--;
-    stack_check(&stack);
+    stack_check(stack);
 }
 
 void stack_print(struct stack* stack)
