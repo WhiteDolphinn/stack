@@ -4,11 +4,8 @@
 
 int main()
 {
-    struct stek stek = stek_start();
-
-    char* command = (char*)calloc(30, sizeof(char));
-
-    input_commands();
+  struct stek stek;
+  stek
   /*  stek_push(&stek, 3);
     stek_push(&stek, 4);
     stek_print(&stek);*/

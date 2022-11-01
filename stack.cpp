@@ -1,13 +1,13 @@
 #include "stek.h"
 #include <stdio.h>
+#include <malloc.h>
 
-struct stek stek_start()
+void stek_start(struct stek* stek)
 {
-    struct stek stek;
+    stek -> data = (stek_type*)calloc(SIZE, sizeof(stek_type));
     for(int i = 0; i < SIZE; i++)
-        stek.data[i] = 0;
-    stek.depth = 0;
-    return stek;
+        stek -> data[i] = 0;
+    stek -> depth = 0;
 }
 
 void input_commands()
