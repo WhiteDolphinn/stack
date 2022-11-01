@@ -1,13 +1,13 @@
-#include "stek.h"
+#include "stack.h"
 #include <stdio.h>
 #include <malloc.h>
 
-void stek_start(struct stek* stek)
+void stack_start(struct stack* stack)
 {
-    stek -> data = (stek_type*)calloc(SIZE, sizeof(stek_type));
+    stack -> data = (stack_type*)calloc(SIZE, sizeof(stack_type));
     for(int i = 0; i < SIZE; i++)
-        stek -> data[i] = 0;
-    stek -> depth = 0;
+        stack -> data[i] = 0;
+    stack -> depth = 0;
 }
 
 void input_commands()
@@ -17,35 +17,35 @@ void input_commands()
     scanf("%s", command); // строки нельзя просто так сравнивать
 }
 
-void stek_push(struct stek* stek, int i)
+void stack_push(struct stack* stack, int i)
 {
-    stek -> data[stek -> depth] = i;
-    stek -> depth++;
+    stack -> data[stack -> depth] = i;
+    stack -> depth++;
 }
 
-void stek_add(struct stek* stek)
+void stack_add(struct stack* stack)
 {
-    stek -> data[stek -> depth - 2] += stek -> data[stek -> depth - 1];
-    stek -> depth--;
+    stack -> data[stack -> depth - 2] += stack -> data[stack -> depth - 1];
+    stack -> depth--;
 }
 
-void stek_print(struct stek* stek)
+void stack_print(struct stack* stack)
 {
     printf("========================\n");
-    for(int i = 0; i < stek -> depth; i++)
+    for(int i = 0; i < stack -> depth; i++)
     {
 
-        printf("%d:  %d\n", i, stek -> data[i]);
+        printf("%d:  %d\n", i, stack -> data[i]);
     }
     printf("========================\n");
 }
 
-int stek_test(struct stek* stek)
+int stack_test(struct stack* stack)
 {
-    if(stek -> depth < 0)
+    if(stack -> depth < 0)
         return 0;
 
-    if(stek -> depth >= SIZE)
+    if(stack -> depth >= SIZE)
         return 0;
 
     return 1;

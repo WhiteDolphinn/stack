@@ -1,15 +1,15 @@
-#ifndef STEK_H
-#define STEK_H
+#ifndef STACK_H
+#define STACK_H
 #define SIZE 15
-typedef int stek_type;
-struct stek{
-stek_type *data;
+typedef int stack_type;
+struct stack{
+stack_type *data;
 int depth;
 };
-void stek_init(struct stek* stek);
+void stack_init(struct stack* stack);
 void input_commands();
-void stek_push(struct stek* stek, int i);
-void stek_add(struct stek* stek);
-void stek_print(struct stek* stek);
-int stek_test(struct stek* stek);
+void stack_push(struct stack* stack, int i);
+void stack_add(struct stack* stack);
+void stack_print(struct stack* stack);
+int stack_test(struct stack* stack);
 #endif
