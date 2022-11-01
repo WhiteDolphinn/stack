@@ -21,6 +21,7 @@ void stack_init(struct stack* stack);
 void stack_delete(struct stack* stack);
 void input_commands();
 void stack_push(struct stack* stack, stack_type i);
+stack_type stack_pop(struct stack* stack);
 void stack_add(struct stack* stack);
 void stack_print(struct stack* stack);
 struct error stack_test(struct stack* stack);

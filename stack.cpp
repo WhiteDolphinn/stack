@@ -34,6 +34,15 @@ void stack_push(struct stack* stack, stack_type i)
     stack_check(stack);
 }
 
+stack_type stack_pop(struct stack* stack)
+{
+    stack_check(stack);
+    stack_type last_element = stack -> data[stack -> depth - 1];
+    stack -> depth--;
+    stack_check(stack);
+    return last_element;
+}
+
 void stack_add(struct stack* stack)
 {
     stack_check(stack);
@@ -65,6 +74,9 @@ struct error stack_test(struct stack* stack)
         return error[2];
 
     if(stack -> depth < 0)
+        return error[2];
+
+    if(stack -> data == nullptr)
         return error[1];
 
     return error[0];
@@ -76,7 +88,7 @@ void stack_check(struct stack* stack)
 
         if(error.code != 0)
         {
-            printf("Error!!!\n %s\n Code: %d", error.name, error.code);
+            printf("Error!!!\n %s\n Code: %d\n", error.name, error.code);
             assert(0);
         }
 }
