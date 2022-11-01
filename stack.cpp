@@ -1,13 +1,16 @@
 #include "stack.h"
 #include <stdio.h>
 #include <malloc.h>
+#include <assert.h>
 
-void stack_start(struct stack* stack)
+void stack_init(struct stack* stack)
 {
     stack -> data = (stack_type*)calloc(SIZE, sizeof(stack_type));
     for(int i = 0; i < SIZE; i++)
         stack -> data[i] = 0;
     stack -> depth = 0;
+
+    steck_check(&stack);
 }
 
 void input_commands()
@@ -17,16 +20,20 @@ void input_commands()
     scanf("%s", command); // строки нельзя просто так сравнивать
 }
 
-void stack_push(struct stack* stack, int i)
+void stack_push(struct stack* stack, stack_type i)
 {
+    stack_check(&stack);
     stack -> data[stack -> depth] = i;
     stack -> depth++;
+    stack_check(&stack);
 }
 
 void stack_add(struct stack* stack)
 {
+    stack_check(&stack);
     stack -> data[stack -> depth - 2] += stack -> data[stack -> depth - 1];
     stack -> depth--;
+    stack_check(&stack);
 }
 
 void stack_print(struct stack* stack)
@@ -40,13 +47,30 @@ void stack_print(struct stack* stack)
     printf("========================\n");
 }
 
-int stack_test(struct stack* stack)
+struct error stack_test(struct stack* stack)
 {
+
+    static struct error error[NUM_OF_ERRORS];
+    error[0] = {.name = "OK", .code = 0};
+    error[1] = {.name = "ERR_DATA", .code = 1};
+    error[2] = {.name = "ERR_DEPTH", .code = 2};
+
+     if(stack -> depth >= SIZE)
+        return error[2];
+
     if(stack -> depth < 0)
-        return 0;
+        return error[1];
 
-    if(stack -> depth >= SIZE)
-        return 0;
+    return error[0];
+}
 
-    return 1;
+void stack_check(struct stack* stack)
+{
+    struct error error = stack_test(stack);
+
+        if(error.code != 0)
+        {
+            printf("Error!!!\n %s\n Code: %d", error.name, error.code);
+            assert(0);
+        }
 }
