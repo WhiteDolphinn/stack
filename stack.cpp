@@ -2,12 +2,24 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <assert.h>
+#define stack_check(STRUCT) \
+do\
+{\
+struct error err = stack_test(STRUCT);\
+\
+        if(err.code != 0)\
+        {\
+            stack_dump(stack, __FILE__, __LINE__, __func__);\
+            printf("Error!!!\n %s\n Code: %d\n", err.name, err.code);\
+            assert(0);\
+        }\
+} while (0)
 
 void stack_init(struct stack* stack)
 {
     stack -> data = (element_t*)calloc(SIZE, sizeof(element_t));
     for(int i = 0; i < SIZE; i++)
-        stack -> data[i] = 0;
+        stack -> data[i] = POISON;
     stack -> depth = 0;
 
     stack_check(stack);
@@ -26,7 +38,7 @@ void input_commands()
     scanf("%s", command); // строки нельзя просто так сравнивать
 }
 
-void stack_push(struct stack* stack, element_t i)
+void stack_push(struct stack* stack, element_t i, int *error)
 {
     stack_check(stack);
     stack -> data[stack -> depth] = i;
@@ -38,6 +50,7 @@ element_t stack_pop(struct stack* stack)
 {
     stack_check(stack);
     element_t last_element = stack -> data[stack -> depth - 1];
+    stack->data[stack->depth - 1] = POISON;
     stack -> depth--;
     stack_check(stack);
     return last_element;
@@ -82,12 +95,20 @@ void stack_div(struct stack* stack)
 void stack_print(struct stack* stack)
 {
     printf("========================\n");
-    for(int i = 0; i < stack -> depth; i++)
+    for(int i = 0; i < SIZE; i++)
     {
-
-        printf("%d:  %d\n", i, stack -> data[i]);
+        if(stack->data[i] != POISON)
+            printf("%d:  %d\n", i, stack -> data[i]);
+        else
+            printf("%d: %X\n", i, stack->data[i]);
     }
     printf("========================\n");
+}
+
+void stack_dump(struct stack* stack, const char* file, int line, const char* function)
+{
+    stack_print(stack);
+    printf("File: %s\nLine: %d\nFunction: %s\n", file, line, function);
 }
 
 struct error stack_test(struct stack* stack)
@@ -110,13 +131,14 @@ struct error stack_test(struct stack* stack)
     return error[0];
 }
 
-void stack_check(struct stack* stack)
+/*void stack_check(struct stack* stack)
 {
     struct error error = stack_test(stack);
 
         if(error.code != 0)
         {
             printf("Error!!!\n %s\n Code: %d\n", error.name, error.code);
+            stack_dump();
             assert(0);
         }
-}
+}*/
