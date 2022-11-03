@@ -13,6 +13,7 @@ int main()
 	stack_push(&stack, 6);
 	stack_div(&stack);
 	stack_add(&stack);
+	stack_sub(&stack);
 	int i = stack_pop(&stack);
     stack_print(&stack);
 	printf("%d\n", i);

@@ -23,6 +23,7 @@ void input_commands();
 void stack_push(struct stack* stack, element_t i);
 element_t stack_pop(struct stack* stack);
 void stack_add(struct stack* stack);
+void stack_sub(struct stack* stack);
 void stack_mul(struct stack* stack);
 void stack_div(struct stack* stack);
 void stack_print(struct stack* stack);
