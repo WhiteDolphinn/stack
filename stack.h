@@ -8,7 +8,7 @@ struct error{
 
 char name[50];
 unsigned int code;
-
+char is_error;
 };
 
 typedef int element_t;
@@ -29,6 +29,7 @@ void stack_mul(struct stack* stack);
 void stack_div(struct stack* stack);
 void stack_print(struct stack* stack);
 void stack_dump(struct stack* stack, const char* file, int line, const char* function);
-struct error stack_test(struct stack* stack);
+int stack_test(struct stack* stack);
+void print_errors(int error);
 //void stack_check(struct stack* stack);
 #endif

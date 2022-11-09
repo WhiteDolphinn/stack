@@ -2,17 +2,14 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <assert.h>
-#include <execinfo.h>
+#include <execinfo.h>//
 #define stack_check(STRUCT) \
 do\
 {\
-struct error err = stack_test(STRUCT);\
-\
-        if(err.code != 0)\
+        if(stack_test(STRUCT))\
         {\
-            \
             stack_dump(stack, __FILE__, __LINE__, __func__);\
-            printf("Error!!!\n %s\n Code: %d\n", err.name, err.code);\
+            print_errors(stack_test(STRUCT));\
             assert(0);\
         }\
 } while (0)
@@ -112,48 +109,50 @@ void stack_print(struct stack* stack)
 void stack_dump(struct stack* stack, const char* file, int line, const char* function)
 {
     stack_print(stack);
+
+
     void* arr[10];
     size_t size = backtrace(arr, 10);
     char** logs = (char**)calloc(size, sizeof(char*));
+
     logs = backtrace_symbols(arr, size);
     printf("\033[31m");
     for(size_t i = 0; i < size; i++)
         printf("%s\n", logs[i]);
+
     printf("\033[0m");
+
     printf("File: %s\nLine: %d\nFunction: %s\n", file, line, function);
     free(logs);
 }
 
-struct error stack_test(struct stack* stack)
+int stack_test(struct stack* stack)
 {
-
-    static struct error error[NUM_OF_ERRORS];
-    error[0] = {.name = "OK", .code = 0};
-    error[1] = {.name = "ERR_DATA", .code = 1};
-    error[2] = {.name = "ERR_DEPTH", .code = 2};
-
-     if(stack -> depth >= SIZE)
-        return error[2];
-
-    if(stack -> depth < 0)
-        return error[2];
+    int error = 0;
+   // int is_any_error = 0;
 
     if(stack -> data == nullptr)
-        return error[1];
+        error |= (0x01 << 0);
 
+     if(stack -> depth >= SIZE || stack->depth < 0)
+        error |= (0x01 << 1);
 
-
-    return error[0];
+    return error;
 }
 
-/*void stack_check(struct stack* stack)
+void print_errors(int error)
 {
-    struct error error = stack_test(stack);
+  static struct error errors[NUM_OF_ERRORS];
+    errors[0] = {.name = "OK", .code = 0};
+    errors[1] = {.name = "ERR_DATA", .code = 1};
+    errors[2] = {.name = "ERR_DEPTH", .code = 2};
 
-        if(error.code != 0)
+    for(int i = 1; i <= NUM_OF_ERRORS; i++)
+    {
+        if((error | 1) == error)
         {
-            printf("Error!!!\n %s\n Code: %d\n", error.name, error.code);
-            stack_dump();
-            assert(0);
+            printf("\033[33mError!!!\n %s\n Code: %d\033[0m\n", errors[i].name, i);
         }
-}*/
+        error = error >> 1;
+    }
+}
