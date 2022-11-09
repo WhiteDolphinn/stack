@@ -30,5 +30,5 @@ void stack_div(struct stack* stack);
 void stack_print(struct stack* stack);
 void stack_dump(struct stack* stack, const char* file, int line, const char* function);
 struct error stack_test(struct stack* stack);
-void stack_check(struct stack* stack);
+//void stack_check(struct stack* stack);
 #endif
