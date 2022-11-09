@@ -31,5 +31,6 @@ void stack_print(struct stack* stack);
 void stack_dump(struct stack* stack, const char* file, int line, const char* function);
 int stack_test(struct stack* stack);
 void print_errors(int error);
+int stack_not_inited(struct stack* stack);
 //void stack_check(struct stack* stack);
 #endif

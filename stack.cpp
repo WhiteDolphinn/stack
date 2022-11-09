@@ -137,6 +137,9 @@ int stack_test(struct stack* stack)
      if(stack -> depth >= SIZE || stack->depth < 0)
         error |= (0x01 << 1);
 
+    if(0)
+        error |= (0x01 << 2);
+
     return error;
 }
 
@@ -146,12 +149,13 @@ void print_errors(int error)
     errors[0] = {.name = "OK", .code = 0};
     errors[1] = {.name = "ERR_DATA", .code = 1};
     errors[2] = {.name = "ERR_DEPTH", .code = 2};
+    errors[3] = {.name = "ERR_INIT", .code = 3};
 
     for(int i = 1; i <= NUM_OF_ERRORS; i++)
     {
         if((error | 1) == error)
         {
-            printf("\033[33mError!!!\n %s\n Code: %d\033[0m\n", errors[i].name, i);
+            printf("\033[33mError!!!\t %s\t Code: %d\033[0m\n", errors[i].name, i);
         }
         error = error >> 1;
     }
