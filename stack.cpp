@@ -134,7 +134,7 @@ int stack_test(struct stack* stack)
     if(stack -> data == nullptr)
         error |= (0x01 << 0);
 
-     if(stack -> depth >= SIZE || stack->depth < 0)
+    if(stack -> depth >= SIZE || stack->depth < 0)
         error |= (0x01 << 1);
 
     if(0)
