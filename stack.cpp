@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <assert.h>
-#include <execinfo.h>//
+#include <execinfo.h>
 #define stack_check(STRUCT) \
 do\
 {\
@@ -17,9 +17,12 @@ do\
 void stack_init(struct stack* stack)
 {
     stack -> data = (element_t*)calloc(SIZE, sizeof(element_t));
+
     for(int i = 0; i < SIZE; i++)
         stack -> data[i] = POISON;
+
     stack -> depth = 0;
+    stack -> is_init = 1;
 
     stack_check(stack);
 }
@@ -27,6 +30,7 @@ void stack_init(struct stack* stack)
 void stack_delete(struct stack* stack)
 {
     stack -> depth = -1;
+    stack -> is_init = 0;
     free(stack -> data);
 }
 
@@ -34,7 +38,7 @@ void input_commands()
 {
     const char* push = "push";
     char command[30];
-    scanf("%s", command); // строки нельзя просто так сравнивать
+    scanf("%s", command);
 }
 
 void stack_push(struct stack* stack, element_t i, int *error)
@@ -137,7 +141,7 @@ int stack_test(struct stack* stack)
     if(stack -> depth >= SIZE || stack->depth < 0)
         error |= (0x01 << 1);
 
-    if(0)
+    if(stack -> is_init == 0)
         error |= (0x01 << 2);
 
     return error;

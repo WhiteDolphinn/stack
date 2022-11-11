@@ -8,7 +8,7 @@ struct error{
 
 char name[50];
 unsigned int code;
-char is_error;
+//char is_error;
 };
 
 typedef int element_t;
@@ -16,6 +16,7 @@ typedef int element_t;
 struct stack{
 element_t *data;
 int depth;
+char is_init;
 };
 
 void stack_init(struct stack* stack);
