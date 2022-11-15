@@ -1,5 +1,8 @@
 #ifndef STACK_H
 #define STACK_H
+
+#include <stdio.h>
+
 #define SIZE 15
 #define NUM_OF_ERRORS 10
 #define POISON 0xDED32DED
@@ -28,10 +31,11 @@ void stack_add(struct stack* stack);
 void stack_sub(struct stack* stack);
 void stack_mul(struct stack* stack);
 void stack_div(struct stack* stack);
-void stack_print(struct stack* stack);
-void stack_dump(struct stack* stack, const char* file, int line, const char* function);
+void stack_print(FILE* file, struct stack* stack);
+void stack_dump(FILE* file, struct stack* stack, const char* filename, int line, const char* function);
 int stack_test(struct stack* stack);
-void print_errors(int error);
-int stack_not_inited(struct stack* stack);
-//void stack_check(struct stack* stack);
+void print_errors(FILE* file, int error);
+
+FILE* get_log_file();
+
 #endif

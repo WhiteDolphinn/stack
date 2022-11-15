@@ -8,8 +8,11 @@ do\
 {\
         if(stack_test(STRUCT))\
         {\
-            stack_dump(stack, __FILE__, __LINE__, __func__);\
-            print_errors(stack_test(STRUCT));\
+            FILE* file = get_log_file();\
+            if(stack->data != nullptr)\
+                stack_dump(file, stack, __FILE__, __LINE__, __func__);\
+            print_errors(file, stack_test(STRUCT));\
+            fclose(file);\
             assert(0);\
         }\
 } while (0)
@@ -32,6 +35,7 @@ void stack_delete(struct stack* stack)
     stack -> depth = -1;
     stack -> is_init = 0;
     free(stack -> data);
+    stack->data = 0;
 }
 
 void input_commands()
@@ -95,38 +99,44 @@ void stack_div(struct stack* stack)
     stack_check(stack);
 }
 
-void stack_print(struct stack* stack)
+void stack_print(FILE* file, struct stack* stack)
 {
-    printf("\033[34m");
-    printf("========================\n");
+    fprintf(file, "\033[34m");
+    fprintf(file, "========================\n");
     for(int i = 0; i < SIZE; i++)
     {
         if(stack->data[i] != POISON)
-            printf("%d:  %d\n", i, stack -> data[i]);
+            fprintf(file, "%d:  %d\n", i, stack -> data[i]);
         else
-            printf("%d: %X\n", i, stack->data[i]);
+            fprintf(file, "%d: %X\n", i, stack->data[i]);
     }
-    printf("========================\n");
-    printf("\033[0m");
+    fprintf(file, "========================\n");
+    fprintf(file, "\033[0m");
 }
 
-void stack_dump(struct stack* stack, const char* file, int line, const char* function)
+void stack_dump(
+                FILE* file,
+                struct stack* stack,
+                const char* filename,
+                int line,
+                const char* function
+                )
 {
-    stack_print(stack);
+    stack_print(file, stack);
 
 
     void* arr[10];
     size_t size = backtrace(arr, 10);
-    char** logs = (char**)calloc(size, sizeof(char*));
+   // char** logs = (char**)calloc(size, sizeof(char*));
 
-    logs = backtrace_symbols(arr, size);
-    printf("\033[31m");
+    char** logs = backtrace_symbols(arr, size);
+    fprintf(file, "\033[31m");
     for(size_t i = 0; i < size; i++)
-        printf("%s\n", logs[i]);
+        fprintf(file, "%s\n", logs[i]);
 
-    printf("\033[0m");
+    fprintf(file, "\033[0m");
 
-    printf("File: %s\nLine: %d\nFunction: %s\n", file, line, function);
+    fprintf(file, "File: %s\nLine: %d\nFunction: %s\n", filename, line, function);
     free(logs);
 }
 
@@ -147,7 +157,7 @@ int stack_test(struct stack* stack)
     return error;
 }
 
-void print_errors(int error)
+void print_errors(FILE* file, int error)
 {
   static struct error errors[NUM_OF_ERRORS];
     errors[0] = {.name = "OK", .code = 0};
@@ -159,8 +169,14 @@ void print_errors(int error)
     {
         if((error | 1) == error)
         {
-            printf("\033[33mError!!!\t %s\t Code: %d\033[0m\n", errors[i].name, i);
+            fprintf(file, "\033[33mError!!!\t %s\t Code: %d\033[0m\n", errors[i].name, i);
         }
         error = error >> 1;
     }
+}
+
+FILE* get_log_file()
+{
+    FILE* file = fopen("log_file.txt", "w");
+    return file;
 }
