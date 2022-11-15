@@ -1,24 +1,11 @@
 #include "stack.h"
 #include "errors.h"
+#include "stack_check.h"
 #include <stdio.h>
 #include <malloc.h>
 #include <assert.h>
 #include <execinfo.h>
-#define stack_check(STRUCT) \
-do\
-{\
-        if(stack_test(STRUCT))\
-        {\
-            FILE* file = get_log_file();\
-            if(stack->data != nullptr)\
-                stack_dump(file, stack, __FILE__, __LINE__, __func__);\
-            int error = stack_test(STRUCT);\
-            print_errors(file, error);\
-            /*fix_error(file, error);*/\
-            fclose(file);\
-            assert(0);\
-        }\
-} while (0)
+
 
 void stack_init(struct stack* stack)
 {
@@ -77,42 +64,6 @@ element_t stack_pop(struct stack* stack)
     }
         stack_check(stack);
     return last_element;
-}
-
-void stack_add(struct stack* stack)
-{
-    stack_check(stack);
-    int x = stack_pop(stack);
-    int y = stack_pop(stack);
-    stack_push(stack, y + x);
-    stack_check(stack);
-}
-
-void stack_sub(struct stack* stack)
-{
-    stack_check(stack);
-    int x = stack_pop(stack);
-    int y = stack_pop(stack);
-    stack_push(stack, y - x);
-    stack_check(stack);
-}
-
-void stack_mul(struct stack* stack)
-{
-    stack_check(stack);
-    int x = stack_pop(stack);
-    int y = stack_pop(stack);
-    stack_push(stack, y * x);
-    stack_check(stack);
-}
-
-void stack_div(struct stack* stack)
-{
-    stack_check(stack);
-    int x = stack_pop(stack);
-    int y = stack_pop(stack);
-    stack_push(stack, y / x);
-    stack_check(stack);
 }
 
 void stack_print(FILE* file, struct stack* stack)
