@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 #define PRINT_IN_CONSOLE 1
-#define SIZE 15
+//#define SIZE 15
 #define NUM_OF_ERRORS 10
 #define POISON 0xDED32DED
 
@@ -21,6 +21,8 @@ struct stack{
 element_t *data;
 int depth;
 char is_init;
+int size;
+char is_resized;
 };
 
 void stack_init(struct stack* stack);
@@ -36,7 +38,8 @@ void stack_print(FILE* file, struct stack* stack);
 void stack_dump(FILE* file, struct stack* stack, const char* filename, int line, const char* function);
 int stack_test(struct stack* stack);
 void print_errors(FILE* file, int error);
-
+//void fix_errors(FILE* file, int error);
+void stack_resize(struct stack* stack);
 FILE* get_log_file();
 
 #endif

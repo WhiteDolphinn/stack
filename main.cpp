@@ -10,7 +10,7 @@ int main()
     stack_push(&stack, 4);
 	//stack_delete(&stack);
 	stack_push(&stack, 5);
-	stack.depth = -2;
+	//stack.depth = -2;
 	stack_push(&stack, 7);
 	stack_push(&stack, 6);
 	stack_div(&stack);
