@@ -1,4 +1,5 @@
 #include "stack.h"
+#include "errors.h"
 #include <stdio.h>
 #include <malloc.h>
 
