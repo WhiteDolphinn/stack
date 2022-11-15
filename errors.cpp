@@ -1,4 +1,5 @@
 #include "errors.h"
+#include <stdio.h>
 
 int stack_test(struct stack* stack)
 {
@@ -17,6 +18,7 @@ int stack_test(struct stack* stack)
     if(stack->is_resized == 1)           //ERR_RESIZE
         error |= (0x01 << 3);
 
+    stack->error = error;
     return error;
 }
 
@@ -38,6 +40,20 @@ void print_errors(FILE* file, int error)
         error = error >> 1;
     }
 }
+
+int is_error(struct stack* stack, const char* function)
+{
+    if(stack->error != 0)
+    {
+        FILE* log_file = get_log_file();
+        fprintf(log_file, "%s wasn't work\n", function);
+        fclose(log_file);
+
+        return 1;
+    }
+    return 0;
+}
+
 
 /*void fix_errors(FILE* file, int error)
 {

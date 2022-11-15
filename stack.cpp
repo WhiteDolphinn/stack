@@ -5,6 +5,7 @@
 #include <malloc.h>
 #include <assert.h>
 #include <execinfo.h>
+#include <time.h>
 
 
 void stack_init(struct stack* stack)
@@ -16,6 +17,7 @@ void stack_init(struct stack* stack)
         stack -> data[i] = POISON;
 
     stack->depth = 0;
+    stack->error = 0;
     stack->is_init = 1;
     stack->is_resized = 0;
 
@@ -26,6 +28,7 @@ void stack_delete(struct stack* stack)
 {
     stack->depth = -1;
     stack->size = 0;
+    stack->error = 0;
     stack->is_init = 0;
     free(stack->data);
     stack->data = 0;
@@ -38,11 +41,15 @@ void input_commands()
     scanf("%s", command);
 }
 
-void stack_push(struct stack* stack, element_t i, int *error)
+void stack_push(struct stack* stack, element_t i)
 {
     stack_check(stack);
+    if(is_error(stack, __func__))
+        return;
+
     stack -> data[stack -> depth] = i;
     stack -> depth++;
+
     if(stack->depth + 3 == stack->size)
     {
         stack->size += 5;
@@ -109,12 +116,31 @@ void stack_dump(
 
 FILE* get_log_file()
 {
-    FILE* file;
-    if(PRINT_IN_CONSOLE == 0)
-        file = fopen("log_file.txt", "w");
+    static int is_got = 0;
+    const char* filename = ".log/log_file.txt";
+
+    if(is_got == 0)
+    {
+        is_got = 1;
+        FILE* file;
+
+        if(PRINT_IN_CONSOLE == 0)
+            file = fopen(filename, "w");
+        else
+            file = stdout;
+
+        return file;
+    }
     else
-        file = stdout;
-    return file;
+    {
+        FILE* file;
+        if(PRINT_IN_CONSOLE == 0)
+            file = fopen(filename, "a");
+        else
+            file = stdout;
+
+        return file;
+    }
 }
 
 void stack_resize(struct stack* stack)

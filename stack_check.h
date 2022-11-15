@@ -16,7 +16,7 @@ do\
             print_errors(file, error);\
             /*fix_error(file, error);*/\
             fclose(file);\
-            assert(0);\
+            /*assert(0);*/\
         }\
 } while (0)
 
