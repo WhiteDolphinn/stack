@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 
+#define PRINT_IN_CONSOLE 1
 #define SIZE 15
 #define NUM_OF_ERRORS 10
 #define POISON 0xDED32DED

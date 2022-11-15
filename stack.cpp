@@ -177,6 +177,10 @@ void print_errors(FILE* file, int error)
 
 FILE* get_log_file()
 {
-    FILE* file = fopen("log_file.txt", "w");
+    FILE* file;
+    if(PRINT_IN_CONSOLE == 0)
+        file = fopen("log_file.txt", "w");
+    else
+        file = stdout;
     return file;
 }
