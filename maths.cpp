@@ -2,6 +2,7 @@
 #include "stack.h"
 #include "errors.h"
 #include "stack_check.h"
+#include "log.h"
 
 
 void stack_add(struct stack* stack)

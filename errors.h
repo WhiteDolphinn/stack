@@ -13,6 +13,5 @@ unsigned int code;
 int stack_test(struct stack* stack);
 void print_errors(FILE* file, int error);
 int is_error(struct stack* stack, const char* function);
-//void fix_errors(FILE* file, int error);
 
 #endif

@@ -1,4 +1,5 @@
 #include "errors.h"
+#include "log.h"
 #include <stdio.h>
 
 int stack_test(struct stack* stack)
@@ -53,23 +54,3 @@ int is_error(struct stack* stack, const char* function)
     }
     return 0;
 }
-
-
-/*void fix_errors(FILE* file, int error)
-{
-    if(error == 0)
-        return void;
-
-    if((error | 1) == error)  //fix ERR_DATA
-    {
-        fprintf(file, "I can't fix this problem");
-        assert(0);
-    }
-    error = error >> 1;
-
-    if((error | 1) == error)  //fix ERR_DEPTH
-    {
-
-    }
-
-}*/

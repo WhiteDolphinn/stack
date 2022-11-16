@@ -1,9 +1,10 @@
 #include "stack.h"
 #include "errors.h"
 #include "stack_check.h"
+#include "log.h"
 #include <stdio.h>
 #include <malloc.h>
-#include <assert.h>
+//#include <assert.h>
 #include <execinfo.h>
 #include <time.h>
 
@@ -37,7 +38,7 @@ void stack_delete(struct stack* stack)
 void input_commands()
 {
     const char* push = "push";
-    char command[30];
+    char command[30] = "";
     scanf("%s", command);
 }
 
@@ -87,7 +88,7 @@ void stack_print(FILE* file, struct stack* stack)
         else
             fprintf(file, "%d: %X\n", i, stack->data[i]);
     }
-    fprintf(file, "========================\n");
+    fprintf(file, "========================\n\n");
     fprintf(file, "\033[0m");
 }
 
@@ -101,8 +102,7 @@ void stack_dump(
 {
     stack_print(file, stack);
 
-
-    void* arr[10];
+    void* arr[10] = {0};
     size_t size = backtrace(arr, 10);
    // char** logs = (char**)calloc(size, sizeof(char*));
 
@@ -111,39 +111,12 @@ void stack_dump(
     for(size_t i = 0; i < size; i++)
         fprintf(file, "%s\n", logs[i]);
 
-    fprintf(file, "\033[0m");
 
-    fprintf(file, "File: %s\nLine: %d\nFunction: %s\n", filename, line, function);
+
+    fprintf(file, "\n\033[0m");
+
+    fprintf(file, "File: %s\nLine: %d\nFunction: %s\n\n", filename, line, function);
     free(logs);
-}
-
-FILE* get_log_file()
-{
-    static int is_got = 0;
-    const char* filename = ".log/log_file.txt";
-
-    if(is_got == 0)
-    {
-        is_got = 1;
-        FILE* file;
-
-        if(PRINT_IN_CONSOLE == 0)
-            file = fopen(filename, "w");
-        else
-            file = stdout;
-
-        return file;
-    }
-    else
-    {
-        FILE* file;
-        if(PRINT_IN_CONSOLE == 0)
-            file = fopen(filename, "a");
-        else
-            file = stdout;
-
-        return file;
-    }
 }
 
 void stack_resize(struct stack* stack)
