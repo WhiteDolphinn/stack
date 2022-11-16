@@ -61,6 +61,9 @@ void stack_push(struct stack* stack, element_t i)
 element_t stack_pop(struct stack* stack)
 {
     stack_check(stack);
+    if(is_error(stack, __func__))
+        return POISON;
+
     element_t last_element = stack -> data[stack -> depth - 1];
     stack->data[stack->depth - 1] = POISON;
     stack -> depth--;
