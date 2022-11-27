@@ -47,6 +47,7 @@ int is_error(struct stack* stack, const char* function)
     if(stack->error != 0)
     {
         FILE* log_file = get_log_file();
+        print_errors(log_file, stack->error);
         fprintf(log_file, "%s wasn't work\n", function);
         fclose(log_file);
 

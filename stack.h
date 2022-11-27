@@ -20,12 +20,12 @@ struct stack{
 
 void stack_init(struct stack* stack);
 void stack_delete(struct stack* stack);
-void input_commands();
+//void input_commands();
 void stack_push(struct stack* stack, element_t i);
 element_t stack_pop(struct stack* stack);
 void stack_print(FILE* file, struct stack* stack);
 void stack_dump(FILE* file, struct stack* stack, const char* filename, int line, const char* function);
 
-void stack_resize(struct stack* stack);
+void stack_resize(struct stack* stack, int extra_mem);
 
 #endif

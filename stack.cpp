@@ -27,6 +27,8 @@ void stack_init(struct stack* stack)
 
 void stack_delete(struct stack* stack)
 {
+    fprintf(get_log_file(), "Stack was deleted!!!");
+    stack_check(stack);
     stack->depth = -1;
     stack->size = 0;
     stack->error = 0;
@@ -35,12 +37,12 @@ void stack_delete(struct stack* stack)
     stack->data = 0;
 }
 
-void input_commands()
+/*void input_commands()
 {
     const char* push = "push";
     char command[30] = "";
     scanf("%s", command);
-}
+}*/
 
 void stack_push(struct stack* stack, element_t i)
 {
@@ -52,10 +54,8 @@ void stack_push(struct stack* stack, element_t i)
     stack -> depth++;
 
     if(stack->depth + 3 == stack->size)
-    {
-        stack->size += 5;
-        stack_resize(stack);
-    }
+        stack_resize(stack, 5);
+
     stack_check(stack);
 }
 
@@ -68,11 +68,11 @@ element_t stack_pop(struct stack* stack)
     element_t last_element = stack -> data[stack -> depth - 1];
     stack->data[stack->depth - 1] = POISON;
     stack -> depth--;
-    if(stack->size - stack->depth == 10)
+    /*if(stack->size - stack->depth == 10)
     {
         stack->size -= 5;
         stack_resize(stack);
-    }
+    }*/
         stack_check(stack);
     return last_element;
 }
@@ -119,11 +119,17 @@ void stack_dump(
     free(logs);
 }
 
-void stack_resize(struct stack* stack)
+void stack_resize(struct stack* stack, int extra_mem)
 {
     stack->is_resized = 1;
-    stack->data = (element_t*)realloc(stack->data, stack->size);
-    stack->data = nullptr;
+   // printf("%d", stack->size);
+    stack->data = (element_t*)realloc(stack->data, (stack->size + extra_mem) * sizeof(element_t));
+
+    for(int i = 0; i < extra_mem; i++)
+        stack->data[stack->size + i] = POISON;
+
+    stack->size += extra_mem;
+
     if(stack->data != nullptr)
         stack->is_resized = 0;
 }
