@@ -4,10 +4,8 @@
 #include "log.h"
 #include <stdio.h>
 #include <malloc.h>
-//#include <assert.h>
 #include <execinfo.h>
 #include <time.h>
-
 
 void stack_init(struct stack* stack)
 {
@@ -21,6 +19,8 @@ void stack_init(struct stack* stack)
     stack->error = 0;
     stack->is_init = 1;
     stack->is_resized = 0;
+    stack->left_stack_canary = LEFT_STACK_CANARY;
+    stack->right_stack_canary = RIGHT_STACK_CANARY;
 
     stack_check(stack);
 }
@@ -36,13 +36,6 @@ void stack_delete(struct stack* stack)
     free(stack->data);
     stack->data = 0;
 }
-
-/*void input_commands()
-{
-    const char* push = "push";
-    char command[30] = "";
-    scanf("%s", command);
-}*/
 
 void stack_push(struct stack* stack, element_t i)
 {
@@ -104,7 +97,6 @@ void stack_dump(
 
     void* arr[10] = {0};
     size_t size = backtrace(arr, 10);
-   // char** logs = (char**)calloc(size, sizeof(char*));
 
     char** logs = backtrace_symbols(arr, size);
     fprintf(file, "\033[31m");
@@ -122,7 +114,6 @@ void stack_dump(
 void stack_resize(struct stack* stack, int extra_mem)
 {
     stack->is_resized = 1;
-   // printf("%d", stack->size);
     stack->data = (element_t*)realloc(stack->data, (stack->size + extra_mem) * sizeof(element_t));
 
     for(int i = 0; i < extra_mem; i++)

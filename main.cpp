@@ -11,6 +11,7 @@ int main()
 	stack_init(&stack);
     stack_push(&stack, 3);
     stack_push(&stack, 4);
+	stack.left_stack_canary = 1;
 	//stack_delete(&stack);
 	stack_push(&stack, 5);
 	//stack.depth = -2;

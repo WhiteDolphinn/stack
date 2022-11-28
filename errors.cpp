@@ -19,6 +19,12 @@ int stack_test(struct stack* stack)
     if(stack->is_resized == 1)           //ERR_RESIZE
         error |= (0x01 << 3);
 
+    if(stack->left_stack_canary != LEFT_STACK_CANARY)       //ERR_LEFT_STACK_CANARY
+        error |= (0x01 << 4);
+
+    if(stack->right_stack_canary != RIGHT_STACK_CANARY)         //ERR_RIGHT_STACK_CANARY
+        error |= (0x01 << 5);
+
     stack->error = error;
     return error;
 }
@@ -31,6 +37,8 @@ void print_errors(FILE* file, int error)
     errors[2] = {.name = "ERR_DEPTH", .code = 2};
     errors[3] = {.name = "ERR_INIT", .code = 3};
     errors[4] = {.name = "ERR_RESIZE", .code = 4};
+    errors[5] = {.name = "ERR_LEFT_STACK_CANARY", .code = 5};
+    errors[6] = {.name = "ERR_RIGHT_STACK_CANARY", .code = 5};
 
     for(int i = 1; i <= NUM_OF_ERRORS; i++)
     {
