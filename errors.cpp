@@ -25,6 +25,14 @@ int stack_test(struct stack* stack)
     if(stack->right_stack_canary != RIGHT_STACK_CANARY)         //ERR_RIGHT_STACK_CANARY
         error |= (0x01 << 5);
 
+    unsigned int* left_data_canary_ptr = (unsigned int*)(stack->data - sizeof(unsigned int)/sizeof(element_t));
+    if(*left_data_canary_ptr != LEFT_DATA_CANARY)
+        error |= (0x01 << 6);
+
+    unsigned int* right_data_canary_ptr = (unsigned int*)(stack->data + stack->size);
+    if(*right_data_canary_ptr != RIGHT_DATA_CANARY)
+        error |= (0x01 << 7);
+
     stack->error = error;
     return error;
 }
@@ -38,7 +46,9 @@ void print_errors(FILE* file, int error)
     errors[3] = {.name = "ERR_INIT", .code = 3};
     errors[4] = {.name = "ERR_RESIZE", .code = 4};
     errors[5] = {.name = "ERR_LEFT_STACK_CANARY", .code = 5};
-    errors[6] = {.name = "ERR_RIGHT_STACK_CANARY", .code = 5};
+    errors[6] = {.name = "ERR_RIGHT_STACK_CANARY", .code = 6};
+    errors[7] = {.name = "ERR_LEFT_DATA_CANARY", .code = 7};
+    errors[8] = {.name = "ERR_RIGHT_DATA_CANARY", .code = 8};
 
     for(int i = 1; i <= NUM_OF_ERRORS; i++)
     {

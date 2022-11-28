@@ -10,7 +10,19 @@
 void stack_init(struct stack* stack)
 {
     stack->size = 10;
-    stack->data = (element_t*)calloc(stack->size, sizeof(element_t));
+    //stack->data = (element_t*)calloc(stack->size, sizeof(element_t));
+    stack->data = (element_t*)malloc(stack->size * sizeof(element_t) + 2 * sizeof(unsigned int));
+
+    unsigned int* stack_data_int = (unsigned int*)stack->data; //left_canary
+    stack_data_int[0] = LEFT_DATA_CANARY;
+    //stack_data_int += (stack->size * sizeof(element_t) + 2 * sizeof(unsigned int)) / sizeof(unsigned int);
+
+    stack->data += sizeof(unsigned int) / sizeof(element_t);
+
+    stack_data_int = (unsigned int*)(stack->data + stack->size); //right_canary
+    *stack_data_int = RIGHT_DATA_CANARY;
+
+
 
     for(int i = 0; i < stack->size; i++)
         stack -> data[i] = POISON;
@@ -33,6 +45,7 @@ void stack_delete(struct stack* stack)
     stack->size = 0;
     stack->error = 0;
     stack->is_init = 0;
+    stack->data -= sizeof(unsigned int) / sizeof(element_t);
     free(stack->data);
     stack->data = 0;
 }
@@ -113,14 +126,25 @@ void stack_dump(
 
 void stack_resize(struct stack* stack, int extra_mem)
 {
+    stack_check(stack);
+
     stack->is_resized = 1;
-    stack->data = (element_t*)realloc(stack->data, (stack->size + extra_mem) * sizeof(element_t));
+    stack->data -= sizeof(unsigned int) / sizeof(element_t);//////
+    stack->data = (element_t*)realloc(stack->data, (stack->size + extra_mem) * sizeof(element_t) + 2 * sizeof(unsigned int));
+
+    if(stack->data != nullptr)
+        stack->is_resized = 0;
+    else    return;
+
+    stack->data += sizeof(unsigned int) / sizeof(element_t);////////
+
+    unsigned int* right_data_canary_ptr = (unsigned int*)(stack->data + stack->size + extra_mem);
+    *right_data_canary_ptr = RIGHT_DATA_CANARY;
 
     for(int i = 0; i < extra_mem; i++)
         stack->data[stack->size + i] = POISON;
 
     stack->size += extra_mem;
 
-    if(stack->data != nullptr)
-        stack->is_resized = 0;
+    stack_check(stack);
 }
