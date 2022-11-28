@@ -12,8 +12,10 @@ FILE* get_log_file()
    // const char* filename = ".log/log_file.txt";
    // printf("%ld", timer);
     char filename[100] = "";
-    sprintf(filename, ".log/log_file_%d_%d_%d_%d_%d_%d_.txt", time->tm_year + 1900, time->tm_mon + 1,
-            time->tm_mday, time->tm_hour, time->tm_min, time->tm_sec);
+    /*sprintf(filename, ".log/log_file_%d_%d_%d_%d_%d_%d_.txt", time->tm_year + 1900, time->tm_mon + 1,
+            time->tm_mday, time->tm_hour, time->tm_min, time->tm_sec);*/
+    sprintf(filename, ".log/%d_%d_%d_%d_%d_log.txt", time->tm_hour, time->tm_min, time->tm_mday,
+            time->tm_mon+1, time->tm_year+1900);
     //printf("%s", filename);
 
     if(is_got == 0)
