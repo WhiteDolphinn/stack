@@ -6,6 +6,7 @@
 #define PRINT_IN_CONSOLE 0
 //#define SIZE 15
 #define POISON 0xDED32DED
+#define SHORT_POISON 228
 #define LEFT_DATA_CANARY 0xBADEDA1
 #define RIGHT_DATA_CANARY 0xBADEDA2
 #define LEFT_STACK_CANARY 0xEDABAD1
@@ -22,6 +23,7 @@ struct stack{
     int depth;
     int size;
     int error;
+    long long int hash;
     char is_init;
     char is_resized;
     unsigned int right_stack_canary;

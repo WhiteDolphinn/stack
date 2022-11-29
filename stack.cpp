@@ -10,6 +10,7 @@
 void stack_init(struct stack* stack)
 {
     stack->size = 10;
+    stack->hash = 10 * SHORT_POISON;
     //stack->data = (element_t*)calloc(stack->size, sizeof(element_t));
     stack->data = (element_t*)malloc(stack->size * sizeof(element_t) + 2 * sizeof(unsigned int));
 
@@ -43,6 +44,7 @@ void stack_delete(struct stack* stack)
     stack_check(stack);
     stack->depth = -1;
     stack->size = 0;
+    stack->hash = 0;
     stack->error = 0;
     stack->is_init = 0;
     stack->data -= sizeof(unsigned int) / sizeof(element_t);
@@ -59,6 +61,9 @@ void stack_push(struct stack* stack, element_t i)
     stack -> data[stack -> depth] = i;
     stack -> depth++;
 
+    stack -> hash += i;
+    stack -> hash -= SHORT_POISON;
+
     if(stack->depth + 3 == stack->size)
         stack_resize(stack, 5);
 
@@ -74,6 +79,10 @@ element_t stack_pop(struct stack* stack)
     element_t last_element = stack -> data[stack -> depth - 1];
     stack->data[stack->depth - 1] = POISON;
     stack -> depth--;
+
+    stack->hash += SHORT_POISON;
+    stack->hash -= last_element;
+
     /*if(stack->size - stack->depth == 10)
     {
         stack->size -= 5;
@@ -143,6 +152,8 @@ void stack_resize(struct stack* stack, int extra_mem)
 
     for(int i = 0; i < extra_mem; i++)
         stack->data[stack->size + i] = POISON;
+
+    stack->hash += extra_mem * SHORT_POISON;
 
     stack->size += extra_mem;
 

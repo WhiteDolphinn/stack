@@ -2,6 +2,8 @@
 #include "log.h"
 #include <stdio.h>
 
+static long long sum_of_elements(struct stack* stack);
+
 int stack_test(struct stack* stack)
 {
     int error = 0;
@@ -26,13 +28,19 @@ int stack_test(struct stack* stack)
         error |= (0x01 << 5);
 
     unsigned int* left_data_canary_ptr = (unsigned int*)(stack->data - sizeof(unsigned int)/sizeof(element_t));
-    if(*left_data_canary_ptr != LEFT_DATA_CANARY)
+    if(*left_data_canary_ptr != LEFT_DATA_CANARY)             //ERR_LEFT_DATA_CANARY
         error |= (0x01 << 6);
 
     unsigned int* right_data_canary_ptr = (unsigned int*)(stack->data + stack->size);
-    if(*right_data_canary_ptr != RIGHT_DATA_CANARY)
+    if(*right_data_canary_ptr != RIGHT_DATA_CANARY)             //ERR_RIGHT_DATA_CANARY
         error |= (0x01 << 7);
 
+
+    if(stack->hash != sum_of_elements(stack))
+    {
+        printf("%lld %lld %lld\n", stack->hash, sum_of_elements(stack), stack->hash - sum_of_elements(stack));
+        error |= (0x01 << 8);
+    }
     stack->error = error;
     return error;
 }
@@ -49,6 +57,7 @@ void print_errors(FILE* file, int error)
     errors[6] = {.name = "ERR_RIGHT_STACK_CANARY", .code = 6};
     errors[7] = {.name = "ERR_LEFT_DATA_CANARY", .code = 7};
     errors[8] = {.name = "ERR_RIGHT_DATA_CANARY", .code = 8};
+    errors[9] = {.name = "ERR_HASH", .code = 9};//last error (const num_of_errors = 10)
 
     for(int i = 1; i <= NUM_OF_ERRORS; i++)
     {
@@ -72,4 +81,17 @@ int is_error(struct stack* stack, const char* function)
         return 1;
     }
     return 0;
+}
+
+static long long int sum_of_elements(struct stack* stack)
+{
+    long long int sum_of_elements = 0;
+
+    for(int i = 0; i < stack->size; i++)
+        if(stack->data[i] == POISON)
+            sum_of_elements += SHORT_POISON;
+        else
+            sum_of_elements += stack->data[i];
+
+    return sum_of_elements;
 }
