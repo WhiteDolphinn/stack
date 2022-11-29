@@ -1,6 +1,7 @@
 #include "log.h"
 #include "stack.h"
 #include <time.h>
+#include <assert.h>
 
 FILE* get_log_file()
 {
@@ -37,6 +38,13 @@ FILE* get_log_file()
             file = fopen(filename, "a");
         else
             file = stdout;
+
+        if(file == nullptr)
+        {
+            printf("I can't open log file.\n")
+            printf("Please, create directory .log\n");
+            assert(0);
+        }
 
         return file;
     }
