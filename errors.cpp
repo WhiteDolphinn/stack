@@ -35,12 +35,12 @@ int stack_test(struct stack* stack)
     if(*right_data_canary_ptr != RIGHT_DATA_CANARY)             //ERR_RIGHT_DATA_CANARY
         error |= (0x01 << 7);
 
-
     if(stack->hash != sum_of_elements(stack))
     {
         printf("%lld %lld %lld\n", stack->hash, sum_of_elements(stack), stack->hash - sum_of_elements(stack));
         error |= (0x01 << 8);
     }
+
     stack->error = error;
     return error;
 }

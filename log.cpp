@@ -41,7 +41,7 @@ FILE* get_log_file()
 
         if(file == nullptr)
         {
-            printf("I can't open log file.\n")
+            printf("I can't open log file.\n");
             printf("Please, create directory .log\n");
             assert(0);
         }

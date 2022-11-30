@@ -17,9 +17,6 @@ do\
             stack_dump(file, stack, __FILE__, __LINE__, __func__);*/\
         int error = stack_test(STRUCT);\
         print_errors(file, error);\
-        /*fix_error(file, error);*/\
-        /*fclose(file)*/;\
-        /*assert(0);*/\
         }\
     fclose(file);\
 } while (0)

@@ -11,19 +11,17 @@ void stack_init(struct stack* stack)
 {
     stack->size = 10;
     stack->hash = 10 * SHORT_POISON;
-    //stack->data = (element_t*)calloc(stack->size, sizeof(element_t));
+
     stack->data = (element_t*)malloc(stack->size * sizeof(element_t) + 2 * sizeof(unsigned int));
 
     unsigned int* stack_data_int = (unsigned int*)stack->data; //left_canary
     stack_data_int[0] = LEFT_DATA_CANARY;
-    //stack_data_int += (stack->size * sizeof(element_t) + 2 * sizeof(unsigned int)) / sizeof(unsigned int);
+
 
     stack->data += sizeof(unsigned int) / sizeof(element_t);
 
     stack_data_int = (unsigned int*)(stack->data + stack->size); //right_canary
     *stack_data_int = RIGHT_DATA_CANARY;
-
-
 
     for(int i = 0; i < stack->size; i++)
         stack -> data[i] = POISON;
