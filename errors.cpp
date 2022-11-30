@@ -7,7 +7,7 @@ static long long sum_of_elements(struct stack* stack);
 int stack_test(struct stack* stack)
 {
     int error = 0;
-   // int is_any_error = 0;
+
 
     if(stack -> data == nullptr)     //ERR_DATA
         error |= (0x01 << 0);
