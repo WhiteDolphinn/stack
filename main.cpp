@@ -31,7 +31,7 @@ int main()
     //stack_dump(get_log_file() ,&stack, __FILE__, __LINE__, __func__);
 	stack_delete(&stack);
 	//printf("%d\n", i);
-	fclose(get_log_file());
+	//fclose(get_log_file());
 
     return 0;
 }
