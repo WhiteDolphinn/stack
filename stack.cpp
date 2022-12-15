@@ -96,7 +96,7 @@ void stack_print(FILE* file, struct stack* stack)
     fprintf(file, "========================\n");
     for(int i = 0; i < stack->size; i++)
     {
-        if(stack->data[i] != POISON)
+        if(stack->data[i] != (int)POISON)
             fprintf(file, "%d:  %d\n", i, stack -> data[i]);
         else
             fprintf(file, "%d: %X\n", i, stack->data[i]);
