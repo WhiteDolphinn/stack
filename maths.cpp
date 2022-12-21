@@ -40,7 +40,7 @@ void stack_mul(struct stack* stack)
 
     int x = stack_pop(stack);
     int y = stack_pop(stack);
-    stack_push(stack, y * x / 100);
+    stack_push(stack, (y/10) * (x /10));
 
     stack_check(stack);
 }
